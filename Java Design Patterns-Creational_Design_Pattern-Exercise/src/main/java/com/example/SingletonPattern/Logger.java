@@ -1,4 +1,4 @@
-package SingletonPattern;
+package com.example.SingletonPattern;
 
 import java.io.Serializable;
 
@@ -17,7 +17,7 @@ public class Logger implements Cloneable, Serializable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning of this object is not allowed");
     }
 
