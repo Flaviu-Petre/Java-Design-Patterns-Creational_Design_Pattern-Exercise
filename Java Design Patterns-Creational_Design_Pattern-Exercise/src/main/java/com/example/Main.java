@@ -1,25 +1,75 @@
 package com.example;
 
+import com.example.FactoryPattern.Interface.VehicleInterface;
+import com.example.FactoryPattern.VehicleFactory.VehicleFactory;
 import com.example.SingletonPattern.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Scanner;
 
 public class Main {
+    //declare scanner for user input
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
         System.out.println("Singleton Pattern Example");
 
-        testBasicSingleton();
+//        testBasicSingleton();
+//
+//        testThreadSafety();
+//
+//        testClonePrevention();
+//
+//        testSerializationSafety();
+//
+//        testLoggingMethods();
 
-        testThreadSafety();
+        testFactoryPattern();
 
-        testClonePrevention();
 
-        testSerializationSafety();
+    }
 
-        testLoggingMethods();
+    private static void testFactoryPattern() {
+        System.out.println("Factory Pattern Example");
+        try{
+            while(true){
+                System.out.print("Enter car type (Car, Bike, Truck): ");
+
+                String type = scanner.nextLine();
+                System.out.println("Enter car name: ");
+                String name = scanner.nextLine();
+
+                System.out.println("Enter car size: ");
+                String size = scanner.nextLine();
+
+                System.out.println("Enter car current speed: ");
+                int speed = Integer.parseInt(scanner.nextLine());
+
+                VehicleInterface vehicle = VehicleFactory.getVehicle(type, name, size, speed);
+
+                System.out.println("Vehicle created: " + vehicle.startEngine());
+
+                vehicle.accelerate(500);
+                System.out.println("Current speed after acceleration: " + vehicle.getSpeed());
+
+                vehicle.brake(200);
+                System.out.println("Current speed after braking: " + vehicle.getSpeed());
+
+
+                System.out.println("Do you want to create another vehicle? (yes/no): ");
+                String answer = scanner.nextLine();
+                if(answer.equalsIgnoreCase("no")){
+                    System.out.println("Exiting...");
+                    break;
+                }
+            }
+        } catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     private static void testBasicSingleton() {
