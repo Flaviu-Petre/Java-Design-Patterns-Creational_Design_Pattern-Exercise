@@ -6,6 +6,10 @@ import com.example.AbstractFactoryPattern.ConcreteFactory.LandVehicleFactory;
 import com.example.AbstractFactoryPattern.ConcreteFactory.WaterVehicleFactory;
 import com.example.FactoryPattern.Interface.VehicleInterface;
 import com.example.FactoryPattern.VehicleFactory.VehicleFactory;
+import com.example.PrototypePattern.ConcreteClasses.Circle;
+import com.example.PrototypePattern.ConcreteClasses.Rectangle;
+import com.example.PrototypePattern.Shape;
+import com.example.PrototypePattern.ShapeRegistry;
 import com.example.SingletonPattern.Logger;
 
 import java.io.FileInputStream;
@@ -30,32 +34,174 @@ public class Main {
 //        testLoggingMethods();
 //        testFactoryPattern();
 
-        try {
-            while (true) {
-                displayMenu();
-                int choice = getUserChoice();
+//        try {
+//            while (true) {
+//                displayMenu();
+//                int choice = getUserChoice();
+//
+//                if (choice == 0) {
+//                    System.out.println("Thank you for using the Vehicle Creation System!");
+//                    break;
+//                }
+//
+//                processUserChoice(choice);
+//
+//                System.out.println("\nWould you like to create another vehicle? (y/n): ");
+//                String continueChoice = scanner.nextLine().trim().toLowerCase();
+//                if (!continueChoice.equals("y") && !continueChoice.equals("yes")) {
+//                    System.out.println("Thank you for using the Vehicle Creation System!");
+//                    break;
+//                }
+//            }
+//        } catch (Exception e) {
+//            System.err.println("An error occurred: " + e.getMessage());
+//        } finally {
+//            scanner.close();
+//        }
 
-                if (choice == 0) {
-                    System.out.println("Thank you for using the Vehicle Creation System!");
-                    break;
-                }
+        initializeShapeRegistry();
 
-                processUserChoice(choice);
+        demonstrateBasicCloning();
 
-                System.out.println("\nWould you like to create another vehicle? (y/n): ");
-                String continueChoice = scanner.nextLine().trim().toLowerCase();
-                if (!continueChoice.equals("y") && !continueChoice.equals("yes")) {
-                    System.out.println("Thank you for using the Vehicle Creation System!");
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-        } finally {
-            scanner.close();
-        }
+        demonstrateShapeModification();
+
+        demonstrateCustomPrototypes();
+
+        demonstratePerformanceBenefits();
 
     }
+
+    private static void initializeShapeRegistry() {
+        System.out.println("1. Initializing Shape Registry with Prototypes");
+        System.out.println("-".repeat(50));
+
+        Circle defaultCircle = new Circle(0, 0, 10);
+        Rectangle defaultRectangle = new Rectangle(20, 15);
+        Circle largeCircle = new Circle(50, 50, 25);
+        Rectangle square = new Rectangle(10, 10);
+
+        ShapeRegistry.addShape("circle", defaultCircle);
+        ShapeRegistry.addShape("rectangle", defaultRectangle);
+        ShapeRegistry.addShape("large_circle", largeCircle);
+        ShapeRegistry.addShape("square", square);
+    }
+
+    private static void demonstrateBasicCloning() {
+        System.out.println("2. Demonstrating Basic Cloning");
+        System.out.println("-".repeat(50));
+
+        Shape clonedCircle1 = ShapeRegistry.getShape("circle");
+        Shape clonedCircle2 = ShapeRegistry.getShape("circle");
+        Shape clonedRectangle = ShapeRegistry.getShape("rectangle");
+        Shape clonedSquare = ShapeRegistry.getShape("square");
+
+        System.out.println("Cloned shapes from registry:");
+        System.out.print("Circle Clone 1: ");
+        clonedCircle1.draw();
+
+        System.out.print("Circle Clone 2: ");
+        clonedCircle2.draw();
+
+        System.out.print("Rectangle Clone: ");
+        clonedRectangle.draw();
+
+        System.out.print("Square Clone: ");
+        clonedSquare.draw();
+
+        System.out.println("\nVerifying clones are separate objects:");
+        System.out.println("Circle clone 1 == Circle clone 2: " + (clonedCircle1 == clonedCircle2));
+        System.out.println("Circle clone 1 hash: " + clonedCircle1.hashCode());
+        System.out.println("Circle clone 2 hash: " + clonedCircle2.hashCode());
+        System.out.println();
+    }
+
+    private static void demonstrateShapeModification() {
+        System.out.println("3. Demonstrating Shape Modification");
+        System.out.println("-".repeat(50));
+
+        Shape originalCircle = ShapeRegistry.getShape("circle");
+        System.out.print("Original circle state: ");
+        originalCircle.draw();
+
+        Shape modifiedCircle = ShapeRegistry.getShape("circle");
+        if (modifiedCircle instanceof Circle) {
+            Circle circle = (Circle) modifiedCircle;
+            circle.setX(100);
+            circle.setY(200);
+            circle.setRadius(30);
+        }
+
+        System.out.print("Modified clone state: ");
+        modifiedCircle.draw();
+
+        Shape freshClone = ShapeRegistry.getShape("circle");
+        System.out.print("Fresh clone (should match original): ");
+        freshClone.draw();
+
+        Shape modifiedRectangle = ShapeRegistry.getShape("rectangle");
+        if (modifiedRectangle instanceof Rectangle) {
+            Rectangle rect = (Rectangle) modifiedRectangle;
+            rect.setLength(50);
+            rect.setWidth(30);
+        }
+
+        System.out.print("Modified rectangle clone: ");
+        modifiedRectangle.draw();
+        System.out.println();
+    }
+
+    private static void demonstrateCustomPrototypes() {
+        System.out.println("4. Demonstrating Custom Prototypes");
+        System.out.println("-".repeat(50));
+
+        Circle customCircle = new Circle(75, 85, 40);
+        Rectangle customRectangle = new Rectangle(100, 5);
+
+        ShapeRegistry.addShape("custom_circle", customCircle);
+        ShapeRegistry.addShape("thin_rectangle", customRectangle);
+
+        System.out.println("Added custom prototypes to registry");
+
+        Shape clonedCustomCircle = ShapeRegistry.getShape("custom_circle");
+        Shape clonedThinRectangle = ShapeRegistry.getShape("thin_rectangle");
+
+        System.out.print("Custom circle clone: ");
+        clonedCustomCircle.draw();
+
+        System.out.print("Thin rectangle clone: ");
+        clonedThinRectangle.draw();
+        System.out.println();
+    }
+
+    private static void demonstratePerformanceBenefits() {
+        System.out.println("5. Demonstrating Performance Benefits");
+        System.out.println("-".repeat(50));
+
+        int iterations = 1000;
+
+        long startTime = System.nanoTime();
+        for (int i = 0; i < iterations; i++) {
+            Shape clonedShape = ShapeRegistry.getShape("circle");
+        }
+        long cloneTime = System.nanoTime() - startTime;
+
+        startTime = System.nanoTime();
+        for (int i = 0; i < iterations; i++) {
+            Circle newCircle = new Circle(0, 0, 10);
+        }
+        long createTime = System.nanoTime() - startTime;
+
+        System.out.println("Performance comparison (" + iterations + " iterations):");
+        System.out.println("Cloning time: " + (cloneTime / 1000000.0) + " ms");
+        System.out.println("Creation time: " + (createTime / 1000000.0) + " ms");
+
+        if (cloneTime < createTime) {
+            System.out.println("Cloning was faster!");
+        } else {
+            System.out.println("Direct creation was faster (in this simple case)");
+        }
+    }
+
 
     private static void displayMenu() {
         System.out.println("\n" + "=".repeat(50));
