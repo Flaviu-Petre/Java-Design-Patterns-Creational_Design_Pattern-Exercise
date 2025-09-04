@@ -4,6 +4,8 @@ import com.example.AbstractFactoryPattern.AbstractFactory.AbstractVehicle;
 import com.example.AbstractFactoryPattern.ConcreteFactory.AirVehicleFactory;
 import com.example.AbstractFactoryPattern.ConcreteFactory.LandVehicleFactory;
 import com.example.AbstractFactoryPattern.ConcreteFactory.WaterVehicleFactory;
+import com.example.BuilderPattern.Car;
+import com.example.BuilderPattern.CarBuilder;
 import com.example.FactoryPattern.Interface.VehicleInterface;
 import com.example.FactoryPattern.VehicleFactory.VehicleFactory;
 import com.example.PrototypePattern.ConcreteClasses.Circle;
@@ -59,15 +61,39 @@ public class Main {
 //            scanner.close();
 //        }
 
-        initializeShapeRegistry();
+//        initializeShapeRegistry();
+//
+//        demonstrateBasicCloning();
+//
+//        demonstrateShapeModification();
+//
+//        demonstrateCustomPrototypes();
+//
+//        demonstratePerformanceBenefits();
 
-        demonstrateBasicCloning();
 
-        demonstrateShapeModification();
+        Car car1 = CarBuilder.newBuilder()
+                .withBrand("Toyota")
+                .withModel("Camry")
+                .withColor("Red")
+                .withEngine("2.5L 4-Cylinder")
+                .withTransmission("Automatic")
+                .withFuelType("Gasoline")
+                .build();
 
-        demonstrateCustomPrototypes();
+        Car car2 = CarBuilder.newBuilder()
+                .withBrand("Honda")
+                .withModel("Civic")
+                .withColor("Blue")
+                .withEngine("2.0L 4-Cylinder")
+                .withTransmission("Manual")
+                .withFuelType("Gasoline")
+                .build();
 
-        demonstratePerformanceBenefits();
+        System.out.println(car1);
+        System.out.println(car2);
+
+
 
     }
 
